@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CursorManager : MonoBehaviour
 {
@@ -17,13 +18,9 @@ public class CursorManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UnlockCursor();
+            SceneManager.LoadScene(0);
         }
 
-        // Optionally, press another key (e.g., F) to lock and hide the cursor again
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            LockCursor();
-        }
     }
 
     void LockCursor()

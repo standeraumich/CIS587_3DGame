@@ -10,8 +10,7 @@ public class MazeRenderer : MonoBehaviour
     [SerializeField] GameObject DamagePrefab;
     [SerializeField] GameObject HealthPrefab;
 
-    [Range(0, 100)]
-    public float damageSpawnPercentage = 0f, healthSpawnPercentage = 0f;
+    public float damageSpawn = 0, healthSpawn = 0;
 
 
     // Physical size of our maze cells. Getting this wrong wil result in overlapping
@@ -20,6 +19,28 @@ public class MazeRenderer : MonoBehaviour
 
     private void Start()
     {
+        // Load the settings
+        int difficulty = PlayerPrefs.GetInt("Difficulty", 0);
+
+        switch (difficulty)
+        {
+            case 0:
+                Debug.Log("Easy Mode");
+                damageSpawn = 1;
+                healthSpawn = 3;
+                break;
+            case 1:
+                Debug.Log("Medium Mode");
+                damageSpawn = 3;
+                healthSpawn = 3;
+                break;
+            case 2:
+                Debug.Log("Hard Mode");
+                damageSpawn = 6;
+                healthSpawn = 2;
+                break;
+        }
+
         MazeCell[,] maze = mazeGenerator.GetMaze();
 
         // Create a list to store the maze cells positions
@@ -77,10 +98,10 @@ public class MazeRenderer : MonoBehaviour
         // Instantiate the exit prefab at the exit position
         Instantiate(ExitPrefab, new Vector3(exitPos.x * CellSize, 0f, exitPos.y * CellSize), Quaternion.identity, transform);
 
-        // Determine the number of maze cells to spawn damage based on the percentage
-        int numberOfDamage = Mathf.RoundToInt(mazePositions.Count * (damageSpawnPercentage / 100f));
+        // Determine if number of Damage is greater than cells, decrease it until its number of cells if so
+        if (damageSpawn > mazePositions.Count) damageSpawn = mazePositions.Count - 2;
 
-        for (int i = 0; i < numberOfDamage; i++)
+        for (int i = 0; i < damageSpawn; i++)
         {
             // Get a random position from the mazePositions list
             int randomIndex = UnityEngine.Random.Range(0, mazePositions.Count);
@@ -91,9 +112,9 @@ public class MazeRenderer : MonoBehaviour
             Instantiate(DamagePrefab, new Vector3(damagePos.x * CellSize, 0f, damagePos.y * CellSize), Quaternion.identity, transform);
         }
 
-        //Determine the nubmer of maze cells to spawn health based on the percentage
-        int numberOfHealth = Mathf.RoundToInt(mazePositions.Count * (damageSpawnPercentage / 100f));
-        for (int i = 0; i < numberOfHealth; i++)
+         // Determine if number of Health is greater than cells, decrease it until its number of cells if so
+        if (healthSpawn > mazePositions.Count) healthSpawn = mazePositions.Count;
+        for (int i = 0; i < healthSpawn; i++)
         {
             // Get a random position from the mazePositions list
             int randomIndex = UnityEngine.Random.Range(0, mazePositions.Count);
@@ -101,7 +122,7 @@ public class MazeRenderer : MonoBehaviour
             mazePositions.RemoveAt(randomIndex); // Remove the position to avoid duplicates
 
             // Instantiate Damage at the selected position
-            Instantiate(HealthPrefab, new Vector3(healthPos.x * CellSize, 0.5f, healthPos.y * CellSize), Quaternion.identity, transform);
+            Instantiate(HealthPrefab, new Vector3(healthPos.x * CellSize, 1f, healthPos.y * CellSize), Quaternion.identity, transform);
         }
 
     }

@@ -16,6 +16,29 @@ public class MazeGenerator : MonoBehaviour
 
     public MazeCell[,] GetMaze()
     {
+        // Load the size 
+        int size = PlayerPrefs.GetInt("Size", 0);
+
+        // Handle size settings
+        switch (size)
+        {
+            case 0:
+                Debug.Log("Small Size");
+                mazeHeight = 5;
+                mazeWidth=5;
+                break;
+            case 1:
+                Debug.Log("Medium Size");
+                mazeHeight = 10;
+                mazeWidth = 10;
+                break;
+            case 2:
+                Debug.Log("Large Size");
+                mazeHeight = 15;
+                mazeWidth = 15;
+                break;
+        }
+
         maze = new MazeCell[mazeWidth, mazeHeight];
 
         for (int x = 0; x < mazeWidth; x++)
