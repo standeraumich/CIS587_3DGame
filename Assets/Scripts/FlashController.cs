@@ -4,23 +4,29 @@ using UnityEngine;
 
 public class FlashController : MonoBehaviour
 {
-    public Light flash;
+    public GameObject flashPrefab;
     public float duration = 5f; // Duration of the flash effect
     public float flashIntensity = 20f;
 
-    private void Start()
-    {
-        flash.intensity = 0f;
-    }
-
     public void TriggerFlash()
     {
-        StartCoroutine(FlashEffect());
+        // Instantiate the flash prefab at the current position and rotation
+        GameObject flashInstance = Instantiate(flashPrefab, transform.position, transform.rotation);
+        Light flash = flashInstance.GetComponent<Light>();
+        flash.enabled = true;
+
+        if (flash != null)
+        {
+            StartCoroutine(FlashEffect(flash));
+        }
+        else
+        {
+            Debug.LogError("No Light component found on the flashPrefab!");
+        }
     }
 
-    private IEnumerator FlashEffect()
+    private IEnumerator FlashEffect(Light flash)
     {
-        flash.enabled = true;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -32,5 +38,8 @@ public class FlashController : MonoBehaviour
 
         flash.intensity = 0f;
         flash.enabled = false;
+
+        // Optionally, destroy the flash instance after it fades out
+        Destroy(flash.gameObject);
     }
 }
