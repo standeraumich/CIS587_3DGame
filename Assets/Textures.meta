@@ -1,12 +1,6 @@
 fileFormatVersion: 2
-guid: 39cb167f775154e459d7805891cf8adf
-labels:
-- door
-- dirty
-- rusty
-- industrial
-- metal
-- urban
+guid: 88f8a420cb21cdf40a940c7431f921ab
+folderAsset: yes
 DefaultImporter:
   externalObjects: {}
   userData: 

@@ -9,14 +9,17 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
-    // Start is called before the first frame update
+    private FlashController flashController;
+
     void Awake()
     {
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
+        flashController = GetComponent<FlashController>();
         onFoot.Jump.performed += ctx => motor.Jump();
+        onFoot.Shoot.performed += ctx => flashController.TriggerFlash();
     }
 
     void FixedUpdate()
