@@ -8,6 +8,10 @@ public class AmbientColorChanger : MonoBehaviour
 
     private void Start()
     {
+        // Remove Skybox Material 
+        RenderSettings.skybox = null; 
+        // Remove Sun source 
+        RenderSettings.sun = null;
         // Start the coroutine to change the ambient color
         StartCoroutine(ChangeAmbientColor(Color.white, Color.black, transitionDuration));
     }
